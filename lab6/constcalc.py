@@ -47,12 +47,18 @@ def exec_assignement(p):
     1
 
 def exec_repetition(p):
-    1
+    if repetition_condition(p):
+        exec_statement(repetition_statements(p))
+        exec_repetition(p)
+    else:
+        exec_statement(p)
+
 
 def exec_selection(p):
 
     if exec_statement(selection_condition(p)):
         return exec_statement(selection_true_branch(p))
+
     elif selection_has_false_branch(p):
         return exec_statement(selection_false_branch(p))
 
@@ -63,11 +69,31 @@ def exec_output(p):
     print(output_expression(p))
 
 def exec_binaryexpr(p):
-    1
+
+    if binaryexpr_operator(p) == '+':
+        return binaryexpr_left(p) + binaryexpr_right(p)
+
+    if binaryexpr_operator(p) == '-':
+        return binaryexpr_left(p) - binaryexpr_right(p)
+
+    if binaryexpr_operator(p) == '*':
+        return binaryexpr_left(p) * binaryexpr_right(p)
+
+    if binaryexpr_operator(p) == '/':
+        return binaryexpr_left(p) / binaryexpr_right(p)
+
 
 def exec_condition(p):
+
     if condition_operator(p) == '>':
         return (condition_left(p) > condition_right(p))
+
+    elif condition_operator(p) == '<':
+        return (condition_left(p) < condition_right(p))
+
+    elif condition_operator(p) == '=':
+        return (condition_left(p) == condition_right(p))
+
 
 
 
@@ -79,4 +105,5 @@ def exec_condition(p):
 
     
 calc1 = ['calc', ['if', [3, '>', 5], ['print', 2], ['print', 4]]]
+calc2 = ['calc', ['while', [3, '<', 5], ['print', 2]], ['print', 'end']]
 exec_program(calc1)
