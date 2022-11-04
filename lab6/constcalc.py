@@ -9,12 +9,39 @@ def exec_program(program):
         return False
 
 def exec_statements(p):
-    for statement in p:
-        if not exec_statement(statement):
-            return False
+
+    if not empty_statements(p):
+        
+        exec_statement(first_statement(p))
+
+        exec_statements(rest_statements(p))
+
 
 def exec_statement(p):
-    1
+
+    if is_statement(p):
+
+        if is_assignment(p):
+            exec_assignement(p)
+
+        elif is_repetition(p):
+            exec_repetition(p)
+
+        elif is_selection(p):
+            exec_selection(p)
+
+        elif is_input(p):
+            exec_input(p)
+
+        elif is_output(p):
+            exec_output(p)
+
+        elif is_binaryexpr(p):
+            exec_binaryexpr(p)
+
+        elif is_condition(p):
+            exec_condition(p)
+
 
 def exec_assignement(p):
     1
@@ -23,19 +50,24 @@ def exec_repetition(p):
     1
 
 def exec_selection(p):
-    1
+
+    if exec_statement(selection_condition(p)):
+        return exec_statement(selection_true_branch(p))
+    elif selection_has_false_branch(p):
+        return exec_statement(selection_false_branch(p))
 
 def exec_input(p):
     1
 
 def exec_output(p):
-    1
+    print(output_expression(p))
 
 def exec_binaryexpr(p):
     1
 
 def exec_condition(p):
-    1
+    if condition_operator(p) == '>':
+        return (condition_left(p) > condition_right(p))
 
 
 
