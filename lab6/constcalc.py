@@ -57,7 +57,7 @@ def exec_selection(p):
         return exec_statement(selection_false_branch(p))
 
 def exec_input(p):
-    1
+    return input_variable(p)
 
 def exec_output(p):
     print(output_expression(p))
