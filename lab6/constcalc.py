@@ -1,6 +1,6 @@
 from calc import *
 
-def exec_program(program):
+def exec_program(program, var_dict={}):
     if is_program(program): # Checks if the input is a valid program
         p = program_statements(program)
         return exec_statements(p)
@@ -15,8 +15,12 @@ def exec_statements(p):
         
         pathfind(first_statement(p))
 
-        pathfind(rest_statements(p))
+        if not empty_statements(rest_statements(p)):
+            pathfind(rest_statements(p))
 
+def kill_program():
+    print("something went wrong")
+    exit()
 
 def pathfind(p):
     
@@ -44,6 +48,9 @@ def exec_statement(p):
     elif is_output(p):
         exec_output(p)
 
+    else:
+        kill_program()
+
 
 def exec_expression(p):
     
@@ -59,12 +66,18 @@ def exec_expression(p):
     elif is_condition(p):
         return exec_condition(p)
 
+    else:
+        kill_program()
 
-def exec_assignement(p):
-    1
+
+def exec_assignement(p,var_dict):
+    new_dict = var_dict.copy()
+    new_dict[assignment_variable(p)] = assignment_expression(p)
+    return new_dict
 
 
 def exec_repetition(p):
+
     if repetition_condition(p):
         pathfind(repetition_statements(p))
         exec_repetition(p)
@@ -79,6 +92,7 @@ def exec_selection(p):
 
     elif selection_has_false_branch(p):
         return pathfind(selection_false_branch(p))
+
 
 
 def exec_input(p):
@@ -117,15 +131,19 @@ def exec_condition(p):
 
 
 
+def test_code():
+        
+    calc1 = ['calc', ['if', [4, '=', 5], ['print', 2], ['print', 4]]]
+    #TODO fix while
+    calc2 = ['calc', ['while', [3, '<', 5], ['print', 2]], ['print', 'end']]
+    calc3 = ['calc', ['print', [3, '/', 5]]]
+    calc4 = ['calc', ['print', 5]]
+    exec_program(calc1)
+
+
+test_code()
 
 
 
 
 
-
-
-    
-calc1 = ['calc', ['if', [3, '<', 5], ['print', 2], ['print', 4]]]
-calc2 = ['calc', ['while', [3, '<', 5], ['print', 2]], ['print', 'end']]
-calc3 = ['calc', ['print', [3, '+', 5]]]
-exec_program(calc1)
