@@ -46,7 +46,7 @@ def exec_statement(p,var_dict):
         return exec_input(p,var_dict)
 
     elif is_output(p):
-        exec_output(p,var_dict)
+        return exec_output(p,var_dict)
 
 
 def exec_expression(p,var_dict):
@@ -66,18 +66,16 @@ def exec_expression(p,var_dict):
 
 def exec_assignement(p,var_dict):
     new_dict = var_dict.copy()
-    new_dict[assignment_variable(p)] = assignment_expression(p)
-    print(var_dict,new_dict)
+    new_dict[assignment_variable(p)] = pathfind(assignment_expression(p),var_dict)
     return new_dict
 
 
 def exec_repetition(p,var_dict):
 
-    if repetition_condition(p,var_dict):
-        pathfind(repetition_statements(p,var_dict),var_dict)
-        exec_repetition(p,var_dict)
+    while repetition_condition(p):
+        return pathfind(repetition_statements(p),var_dict)
     else:
-        pathfind(p,var_dict)
+        return pathfind(p,var_dict)
 
 
 def exec_selection(p,var_dict):
@@ -91,26 +89,31 @@ def exec_selection(p,var_dict):
 
 
 def exec_input(p,var_dict):
-    return input_variable(p,var_dict)
+
+    new_dict = var_dict.copy()
+    new_dict[input_variable(p)] = int(input("input variable value: "))
+    return new_dict
+
 
 
 def exec_output(p,var_dict):
     print(pathfind(output_expression(p),var_dict))
+    return var_dict
 
 
 def exec_binaryexpr(p,var_dict):
 
     if binaryexpr_operator(p) == '+':
-        return binaryexpr_left(p) + binaryexpr_right(p)
+        return pathfind(binaryexpr_left(p),var_dict) + pathfind(binaryexpr_right(p),var_dict)
 
     if binaryexpr_operator(p) == '-':
-        return binaryexpr_left(p) - binaryexpr_right(p)
+        return pathfind(binaryexpr_left(p),var_dict) - pathfind(binaryexpr_right(p),var_dict)
 
     if binaryexpr_operator(p) == '*':
-        return binaryexpr_left(p) * binaryexpr_right(p)
+        return pathfind(binaryexpr_left(p),var_dict) * pathfind(binaryexpr_right(p),var_dict)
 
     if binaryexpr_operator(p) == '/':
-        return binaryexpr_left(p) / binaryexpr_right(p)
+        return pathfind(binaryexpr_left(p),var_dict) / pathfind(binaryexpr_right(p),var_dict)
 
     else:
         kill_program()
@@ -119,13 +122,13 @@ def exec_binaryexpr(p,var_dict):
 def exec_condition(p,var_dict):
 
     if condition_operator(p) == '>':
-        return (condition_left(p) > condition_right(p))
+        return (pathfind(condition_left(p),var_dict) > pathfind(condition_right(p),var_dict))
 
     elif condition_operator(p) == '<':
-        return (condition_left(p) < condition_right(p))
+        return (pathfind(condition_left(p),var_dict) < pathfind(condition_right(p),var_dict))
 
     elif condition_operator(p) == '=':
-        return (condition_left(p) == condition_right(p))
+        return (pathfind(condition_left(p),var_dict) == pathfind(condition_right(p),var_dict))
 
     else:
         kill_program()
@@ -140,7 +143,11 @@ def test_code():
     calc3 = ['calc', ['print', [3, '/', 5]]]
     calc4 = ['calc', ['print', 5]]
     calc5 = ['calc', ['set', 'a', 5], ['print', 'a']]
-    exec_program(calc1)
+    calc6 = ['calc', ['read', 'n'], ['print', 'n'], ['if', ['n', '>', 5], ['print', 2], ['print', 4]]]
+    calc7 = ['calc', ['set', 'x', 7], ['set', 'y', 12], ['set', 'z', ['x', '+', 'y']], ['print', 'z']]
+    calc8 = ['calc', ['read', 'p1'],['set', 'p2', 47],['set', 'p3', 179],['set', 'result', [['p1', '*', 'p2'], '-', 'p3']],['print', 'result']]
+    calc9 = ['calc', ['read', 'n'],['set', 'sum', 0],['while', ['n', '>', 0],['set', 'sum', ['sum', '+', 'n']],['set', 'n', ['n', '-', 1]]],['print', 'sum']]
+    exec_program(calc2)
 
 
 test_code()
