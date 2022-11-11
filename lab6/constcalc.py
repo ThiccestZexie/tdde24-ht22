@@ -13,9 +13,16 @@ def exec_statements(p,var_dict):
 
     if not empty_statements(p):
         
+<<<<<<< HEAD
         pathfind(first_statement(p))
 
         pathfind(rest_statements(p))
+=======
+        var_dict = pathfind(first_statement(p),var_dict)
+        exec_statements(rest_statements(p),var_dict)
+
+
+>>>>>>> 974b4f55eb4f1c6f247e453657443dcfed5f9a11
 
 def kill_program():
     print("something went wrong")
@@ -33,22 +40,19 @@ def pathfind(p,var_dict):
 def exec_statement(p,var_dict):
 
     if is_assignment(p):
-        exec_assignement(p,var_dict)
+        return exec_assignement(p,var_dict)
 
     elif is_repetition(p):
-        exec_repetition(p,var_dict)
+        return exec_repetition(p,var_dict)
 
     elif is_selection(p):
-        exec_selection(p,var_dict)
+        return exec_selection(p,var_dict)
 
     elif is_input(p):
-        exec_input(p,var_dict)
+        return exec_input(p,var_dict)
 
     elif is_output(p):
         exec_output(p,var_dict)
-
-    else:
-        kill_program()
 
 
 def exec_expression(p,var_dict):
@@ -65,14 +69,12 @@ def exec_expression(p,var_dict):
     elif is_condition(p):
         return exec_condition(p,var_dict)
 
-    else:
-        kill_program()
-
 
 def exec_assignement(p,var_dict):
     new_dict = var_dict.copy()
     new_dict[assignment_variable(p)] = assignment_expression(p)
-    pathfind(p,new_dict)
+    print(var_dict,new_dict)
+    return new_dict
 
 
 def exec_repetition(p,var_dict):
@@ -116,6 +118,9 @@ def exec_binaryexpr(p,var_dict):
     if binaryexpr_operator(p) == '/':
         return binaryexpr_left(p) / binaryexpr_right(p)
 
+    else:
+        kill_program()
+
 
 def exec_condition(p,var_dict):
 
@@ -128,6 +133,9 @@ def exec_condition(p,var_dict):
     elif condition_operator(p) == '=':
         return (condition_left(p) == condition_right(p))
 
+    else:
+        kill_program()
+
 
 
 def test_code():
@@ -138,7 +146,7 @@ def test_code():
     calc3 = ['calc', ['print', [3, '/', 5]]]
     calc4 = ['calc', ['print', 5]]
     calc5 = ['calc', ['set', 'a', 5], ['print', 'a']]
-    exec_program(calc5)
+    exec_program(calc1)
 
 
 
