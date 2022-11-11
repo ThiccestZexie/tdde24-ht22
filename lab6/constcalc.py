@@ -14,8 +14,8 @@ def exec_statements(p):
     if not empty_statements(p):
         
         pathfind(first_statement(p))
-
-        pathfind(rest_statements(p))
+        if not empty_statements(rest_statements(p)):
+            pathfind(rest_statements(p))
 
 
 def pathfind(p):
@@ -119,13 +119,8 @@ def exec_condition(p):
 
 
 
-
-
-
-
-
     
 calc1 = ['calc', ['if', [3, '<', 5], ['print', 2], ['print', 4]]]
 calc2 = ['calc', ['while', [3, '<', 5], ['print', 2]], ['print', 'end']]
 calc3 = ['calc', ['print', [3, '+', 5]]]
-exec_program(calc1)
+exec_program(calc2)
