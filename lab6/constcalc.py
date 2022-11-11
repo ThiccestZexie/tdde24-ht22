@@ -13,16 +13,10 @@ def exec_statements(p,var_dict):
 
     if not empty_statements(p):
         
-<<<<<<< HEAD
-        pathfind(first_statement(p))
-
-        pathfind(rest_statements(p))
-=======
         var_dict = pathfind(first_statement(p),var_dict)
         exec_statements(rest_statements(p),var_dict)
 
 
->>>>>>> 974b4f55eb4f1c6f247e453657443dcfed5f9a11
 
 def kill_program():
     print("something went wrong")
@@ -146,16 +140,15 @@ def test_code():
     calc3 = ['calc', ['print', [3, '/', 5]]]
     calc4 = ['calc', ['print', 5]]
     calc5 = ['calc', ['set', 'a', 5], ['print', 'a']]
-    exec_program(calc1)
+    exec_program(calc5)
+
+calc1 = ['calc', ['set', 'a', 5], ['print', 'a']]
+new_table = exec_program(calc1)
+print(new_table)
+my_table = {'a': 7}
+new_table = exec_program(calc1, my_table)
+print(new_table)
 
 
 
 
-
-
-
-    
-calc1 = ['calc', ['if', [3, '<', 5], ['print', 2], ['print', 4]]]
-calc2 = ['calc', ['while', [3, '<', 5], ['print', 2]], ['print', 'end']]
-calc3 = ['calc', ['print', [3, '+', 5]]]
-exec_program(calc1)
