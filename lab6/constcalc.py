@@ -73,7 +73,8 @@ def exec_assignement(p,var_dict):
 def exec_repetition(p,var_dict):
     while pathfind(repetition_condition(p),var_dict):
         var_dict = exec_statements(repetition_statements(p),var_dict)
-    return var_dict
+
+        return var_dict
 
 
 def exec_selection(p,var_dict):
