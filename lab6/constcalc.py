@@ -16,7 +16,8 @@ def exec_statements(p,var_dict):
         var_dict = exec_statement(first_statement(p),var_dict)
         exec_statements(rest_statements(p),var_dict)
 
-
+    else:
+        return var_dict
 
 def kill_program():
     print("something went wrong")
@@ -130,9 +131,9 @@ def exec_condition(p,var_dict):
 
 def test_code():
         
-    calc1 = ['calc', ['if', [4, '=', 5], ['print', 2], ['print', 4]]]
-    #TODO fix while
-    calc2 = ['calc', ['while', [3, '<', 5], ['print', 2]]]
+    calc1 = ['calc', ['set', 'n', 0], ['set', 'n', 1], ['set', 'n', 3], ['set', 'n', 2], ['print', 'n'], ['print', 'n']]
+    #TODO check where the value of n vanishes
+    calc2 = ['calc', ['set', 'n', 0], ['while', [0, '<', 5], ['print', 'n']]]
     calc3 = ['calc', ['print', [3, '/', 5]]]
     calc4 = ['calc', ['print', 5]]
     calc5 = ['calc', ['set', 'a', 5], ['print', 'a']]
@@ -140,7 +141,7 @@ def test_code():
     calc7 = ['calc', ['set', 'x', 7], ['set', 'y', 12], ['set', 'z', ['x', '+', 'y']], ['print', 'z']]
     calc8 = ['calc', ['read', 'p1'],['set', 'p2', 47],['set', 'p3', 179],['set', 'result', [['p1', '*', 'p2'], '-', 'p3']],['print', 'result']]
     calc9 = ['calc', ['read', 'n'],['set', 'sum', 0],['while', ['n', '>', 0],['set', 'sum', ['sum', '+', 'n']],['set', 'n', ['n', '-', 1]]],['print', 'sum']]
-    exec_program(calc9)
+    exec_program(calc2)
 
 
 test_code()
