@@ -71,11 +71,9 @@ def exec_assignement(p,var_dict):
 
 
 def exec_repetition(p,var_dict):
-
-    while repetition_condition(p):
-        return pathfind(repetition_statements(p),var_dict)
-    else:
-        return pathfind(p,var_dict)
+    while pathfind(repetition_condition(p),var_dict):
+        var_dict = exec_statements(repetition_statements(p),var_dict)
+    return var_dict
 
 
 def exec_selection(p,var_dict):
@@ -139,7 +137,7 @@ def test_code():
         
     calc1 = ['calc', ['if', [4, '=', 5], ['print', 2], ['print', 4]]]
     #TODO fix while
-    calc2 = ['calc', ['while', [3, '<', 5], ['print', 2]], ['print', 'end']]
+    calc2 = ['calc', ['while', [3, '<', 5], ['print', 2]]]
     calc3 = ['calc', ['print', [3, '/', 5]]]
     calc4 = ['calc', ['print', 5]]
     calc5 = ['calc', ['set', 'a', 5], ['print', 'a']]
@@ -147,12 +145,7 @@ def test_code():
     calc7 = ['calc', ['set', 'x', 7], ['set', 'y', 12], ['set', 'z', ['x', '+', 'y']], ['print', 'z']]
     calc8 = ['calc', ['read', 'p1'],['set', 'p2', 47],['set', 'p3', 179],['set', 'result', [['p1', '*', 'p2'], '-', 'p3']],['print', 'result']]
     calc9 = ['calc', ['read', 'n'],['set', 'sum', 0],['while', ['n', '>', 0],['set', 'sum', ['sum', '+', 'n']],['set', 'n', ['n', '-', 1]]],['print', 'sum']]
-    exec_program(calc2)
+    exec_program(calc9)
 
 
 test_code()
-
-
-
-
-
