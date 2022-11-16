@@ -13,7 +13,7 @@ def exec_statements(p,var_dict):
 
     if not empty_statements(p):
         
-        var_dict = pathfind(first_statement(p),var_dict)
+        var_dict = exec_statement(first_statement(p),var_dict)
         exec_statements(rest_statements(p),var_dict)
 
 
@@ -21,14 +21,6 @@ def exec_statements(p,var_dict):
 def kill_program():
     print("something went wrong")
     exit()
-
-def pathfind(p,var_dict):
-    
-    if is_statement(p):
-        return exec_statement(p,var_dict)
-    
-    else:
-        return exec_expression(p,var_dict)
 
 
 def exec_statement(p,var_dict):
@@ -47,6 +39,8 @@ def exec_statement(p,var_dict):
 
     elif is_output(p):
         return exec_output(p,var_dict)
+    else: 
+        return exec_expression(p, var_dict)
 
 
 def exec_expression(p,var_dict):
@@ -66,12 +60,12 @@ def exec_expression(p,var_dict):
 
 def exec_assignement(p,var_dict):
     new_dict = var_dict.copy()
-    new_dict[assignment_variable(p)] = pathfind(assignment_expression(p),var_dict)
+    new_dict[assignment_variable(p)] = exec_statement(assignment_expression(p),var_dict)
     return new_dict
 
 
 def exec_repetition(p,var_dict):
-    while pathfind(repetition_condition(p),var_dict):
+    while exec_statement(repetition_condition(p),var_dict):
         var_dict = exec_statements(repetition_statements(p),var_dict)
 
     return var_dict
@@ -79,11 +73,11 @@ def exec_repetition(p,var_dict):
 
 def exec_selection(p,var_dict):
 
-    if pathfind(selection_condition(p),var_dict):
-        return pathfind(selection_true_branch(p),var_dict)
+    if exec_statement(selection_condition(p),var_dict):
+        return exec_statement(selection_true_branch(p),var_dict)
 
     elif selection_has_false_branch(p):
-        return pathfind(selection_false_branch(p),var_dict)
+        return exec_statement(selection_false_branch(p),var_dict)
 
 
 
@@ -96,23 +90,23 @@ def exec_input(p,var_dict):
 
 
 def exec_output(p,var_dict):
-    print(pathfind(output_expression(p),var_dict))
+    print(exec_statement(output_expression(p),var_dict))
     return var_dict
 
 
 def exec_binaryexpr(p,var_dict):
 
     if binaryexpr_operator(p) == '+':
-        return pathfind(binaryexpr_left(p),var_dict) + pathfind(binaryexpr_right(p),var_dict)
+        return exec_statement(binaryexpr_left(p),var_dict) + exec_statement(binaryexpr_right(p),var_dict)
 
     if binaryexpr_operator(p) == '-':
-        return pathfind(binaryexpr_left(p),var_dict) - pathfind(binaryexpr_right(p),var_dict)
+        return exec_statement(binaryexpr_left(p),var_dict) - exec_statement(binaryexpr_right(p),var_dict)
 
     if binaryexpr_operator(p) == '*':
-        return pathfind(binaryexpr_left(p),var_dict) * pathfind(binaryexpr_right(p),var_dict)
+        return exec_statement(binaryexpr_left(p),var_dict) * exec_statement(binaryexpr_right(p),var_dict)
 
     if binaryexpr_operator(p) == '/':
-        return pathfind(binaryexpr_left(p),var_dict) / pathfind(binaryexpr_right(p),var_dict)
+        return exec_statement(binaryexpr_left(p),var_dict) / exec_statement(binaryexpr_right(p),var_dict)
 
     else:
         kill_program()
@@ -121,13 +115,13 @@ def exec_binaryexpr(p,var_dict):
 def exec_condition(p,var_dict):
 
     if condition_operator(p) == '>':
-        return (pathfind(condition_left(p),var_dict) > pathfind(condition_right(p),var_dict))
+        return (exec_statement(condition_left(p),var_dict) > exec_statement(condition_right(p),var_dict))
 
     elif condition_operator(p) == '<':
-        return (pathfind(condition_left(p),var_dict) < pathfind(condition_right(p),var_dict))
+        return (exec_statement(condition_left(p),var_dict) < exec_statement(condition_right(p),var_dict))
 
     elif condition_operator(p) == '=':
-        return (pathfind(condition_left(p),var_dict) == pathfind(condition_right(p),var_dict))
+        return (exec_statement(condition_left(p),var_dict) == exec_statement(condition_right(p),var_dict))
 
     else:
         kill_program()
@@ -146,7 +140,7 @@ def test_code():
     calc7 = ['calc', ['set', 'x', 7], ['set', 'y', 12], ['set', 'z', ['x', '+', 'y']], ['print', 'z']]
     calc8 = ['calc', ['read', 'p1'],['set', 'p2', 47],['set', 'p3', 179],['set', 'result', [['p1', '*', 'p2'], '-', 'p3']],['print', 'result']]
     calc9 = ['calc', ['read', 'n'],['set', 'sum', 0],['while', ['n', '>', 0],['set', 'sum', ['sum', '+', 'n']],['set', 'n', ['n', '-', 1]]],['print', 'sum']]
-    exec_program(calc8)
+    exec_program(calc9)
 
 
 test_code()
