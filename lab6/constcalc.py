@@ -74,7 +74,7 @@ def exec_repetition(p,var_dict):
     while pathfind(repetition_condition(p),var_dict):
         var_dict = exec_statements(repetition_statements(p),var_dict)
 
-        return var_dict
+    return var_dict
 
 
 def exec_selection(p,var_dict):
@@ -146,7 +146,7 @@ def test_code():
     calc7 = ['calc', ['set', 'x', 7], ['set', 'y', 12], ['set', 'z', ['x', '+', 'y']], ['print', 'z']]
     calc8 = ['calc', ['read', 'p1'],['set', 'p2', 47],['set', 'p3', 179],['set', 'result', [['p1', '*', 'p2'], '-', 'p3']],['print', 'result']]
     calc9 = ['calc', ['read', 'n'],['set', 'sum', 0],['while', ['n', '>', 0],['set', 'sum', ['sum', '+', 'n']],['set', 'n', ['n', '-', 1]]],['print', 'sum']]
-    exec_program(calc9)
+    exec_program(calc8)
 
 
 test_code()
