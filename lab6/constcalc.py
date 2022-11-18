@@ -15,6 +15,7 @@ def exec_statements(p,var_dict):
         
         var_dict = exec_statement(first_statement(p),var_dict)
         var_dict = exec_statements(rest_statements(p),var_dict)
+
     return var_dict
 
 def exec_statement(p,var_dict):
@@ -122,7 +123,7 @@ def test_code():
     calc4 = ['calc', ['print', 5]]
     
     calc5 = ['calc', ['set', 'a', 5], ['print', 'a']]
-    calc6 = ['calc', ['read', 'n'], ['print', 'n'], ['icd f', ['n', '>', 5], ['print', 2], ['print', 4]]]
+    calc6 = ['calc', ['read', 'n'], ['print', 'n'], ['if', ['n', '>', 5], ['print', 2], ['print', 4]]]
     calc7 = ['calc', ['set', 'x', 7], ['set', 'y', 12], ['set', 'z', ['x', '+', 'y']], ['print', 'z']]
     calc8 = ['calc', ['read', 'p1'],['set', 'p2', 47],['set', 'p3', 179],['set', 'result', [['p1', '*', 'p2'], '-', 'p3']],['print', 'result']]
   #  calc9 = ['calc', ['read', 'n'],['while', [0, '<', 5]['set', 'sum', 2], ['set', 'n',['n', '+', 'sum']],['set', 'n',['n', '-','sum']], ['print', 'n'], ['print', 'sum']]]
