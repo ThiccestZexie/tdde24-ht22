@@ -283,3 +283,4 @@ def is_constant(p):
     (* En konstant är ett tal i Python. *)
     CONSTANT = ? a Python number ? ;
 """
+
