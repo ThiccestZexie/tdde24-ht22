@@ -1,109 +1,132 @@
 from calc import *
 
-def exec_program(program):
+def exec_program(program, var_dict={}):
     if is_program(program): # Checks if the input is a valid program
         p = program_statements(program)
-        return exec_statements(p)
+        return exec_statements(p,var_dict)
     else:
         print("this isnt a calc program")
         return False
 
-def exec_statements(p):
+
+def exec_statements(p,var_dict):
 
     if not empty_statements(p):
         
-        exec_statement(first_statement(p))
+        var_dict = exec_statement(first_statement(p),var_dict)
+        var_dict = exec_statements(rest_statements(p),var_dict)
+    return var_dict
 
-        exec_statements(rest_statements(p))
+def exec_statement(p,var_dict):
 
+    if is_assignment(p):
+        return exec_assignement(p,var_dict)
 
-def exec_statement(p):
+    elif is_repetition(p):
+        return exec_repetition(p,var_dict)
 
-    if is_statement(p):
+    elif is_selection(p):
+        return exec_selection(p,var_dict)
 
-        if is_assignment(p):
-            exec_assignement(p)
+    elif is_input(p):
+        return exec_input(p,var_dict)
 
-        elif is_repetition(p):
-            exec_repetition(p)
-
-        elif is_selection(p):
-            exec_selection(p)
-
-        elif is_input(p):
-            exec_input(p)
-
-        elif is_output(p):
-            exec_output(p)
-
-        elif is_binaryexpr(p):
-            exec_binaryexpr(p)
-
-        elif is_condition(p):
-            exec_condition(p)
+    elif is_output(p):
+        return exec_output(p,var_dict)
+    else: 
+        return exec_expression(p, var_dict)
 
 
-def exec_assignement(p):
-    1
+def exec_expression(p,var_dict):
+    
+    if is_variable(p):
+        return var_dict[p]
 
-def exec_repetition(p):
-    if repetition_condition(p):
-        exec_statement(repetition_statements(p))
-        exec_repetition(p)
-    else:
-        exec_statement(p)
+    elif is_constant(p):
+        return p
+    
+    elif is_binaryexpr(p):
+        return exec_binaryexpr(p,var_dict)
+
+    elif is_condition(p):
+        return exec_condition(p,var_dict)
 
 
-def exec_selection(p):
+def exec_assignement(p,var_dict):
+    new_dict = var_dict.copy()
+    new_dict[assignment_variable(p)] = exec_statement(assignment_expression(p),var_dict)
+    return new_dict
 
-    if exec_statement(selection_condition(p)):
-        return exec_statement(selection_true_branch(p))
+
+def exec_repetition(p,var_dict):
+    while exec_statement(repetition_condition(p),var_dict):
+        var_dict = exec_statements(repetition_statements(p),var_dict)
+    return var_dict
+
+
+def exec_selection(p,var_dict):
+
+    if exec_statement(selection_condition(p),var_dict):
+        return exec_statement(selection_true_branch(p),var_dict)
 
     elif selection_has_false_branch(p):
-        return exec_statement(selection_false_branch(p))
+        return exec_statement(selection_false_branch(p),var_dict)
 
-def exec_input(p):
-    return input_variable(p)
 
-def exec_output(p):
-    print(output_expression(p))
 
-def exec_binaryexpr(p):
+def exec_input(p,var_dict):
+
+    new_dict = var_dict.copy()
+    new_dict[input_variable(p)] = int(input(f"Enter value for {input_variable(p)}: "))
+    return new_dict
+
+
+
+def exec_output(p,var_dict):
+    print(output_expression(p), '=', exec_statement(output_expression(p),var_dict))
+    return var_dict
+
+def exec_binaryexpr(p,var_dict):
 
     if binaryexpr_operator(p) == '+':
-        return binaryexpr_left(p) + binaryexpr_right(p)
+        return exec_statement(binaryexpr_left(p),var_dict) + exec_statement(binaryexpr_right(p),var_dict)
 
     if binaryexpr_operator(p) == '-':
-        return binaryexpr_left(p) - binaryexpr_right(p)
+        return exec_statement(binaryexpr_left(p),var_dict) - exec_statement(binaryexpr_right(p),var_dict)
 
     if binaryexpr_operator(p) == '*':
-        return binaryexpr_left(p) * binaryexpr_right(p)
+        return exec_statement(binaryexpr_left(p),var_dict) * exec_statement(binaryexpr_right(p),var_dict)
 
     if binaryexpr_operator(p) == '/':
-        return binaryexpr_left(p) / binaryexpr_right(p)
+        return exec_statement(binaryexpr_left(p),var_dict) / exec_statement(binaryexpr_right(p),var_dict)
 
 
-def exec_condition(p):
+def exec_condition(p,var_dict):
 
     if condition_operator(p) == '>':
-        return (condition_left(p) > condition_right(p))
+        return (exec_statement(condition_left(p),var_dict) > exec_statement(condition_right(p),var_dict))
 
     elif condition_operator(p) == '<':
-        return (condition_left(p) < condition_right(p))
+        return (exec_statement(condition_left(p),var_dict) < exec_statement(condition_right(p),var_dict))
 
     elif condition_operator(p) == '=':
-        return (condition_left(p) == condition_right(p))
+        return (exec_statement(condition_left(p),var_dict) == exec_statement(condition_right(p),var_dict))
 
 
 
-
-
-
-
-
-
-
+def test_code():
+        
+    calc1 = ['calc', ['set', 'n', 0], ['set', 'n', 1], ['set', 'n', 3], ['set', 'n', 2], ['print', 'n'], ['print', 'n']]
+    calc2 = ['calc', ['set', 'n', 0], ['while', [0, '<', 5],['print', 'n']]]
+    calc3 = ['calc', ['print', [3, '/', 5]]]
+    calc4 = ['calc', ['print', 5]]
     
-calc1 = ['calc', ['if', [3, '>', 5], ['print', 2], ['print', 4]]]
-calc2 = ['calc', ['while', [3, '<', 5], ['print', 2]], ['print', 'end']]
-exec_program(calc1)
+    calc5 = ['calc', ['set', 'a', 5], ['print', 'a']]
+    calc6 = ['calc', ['read', 'n'], ['print', 'n'], ['icd f', ['n', '>', 5], ['print', 2], ['print', 4]]]
+    calc7 = ['calc', ['set', 'x', 7], ['set', 'y', 12], ['set', 'z', ['x', '+', 'y']], ['print', 'z']]
+    calc8 = ['calc', ['read', 'p1'],['set', 'p2', 47],['set', 'p3', 179],['set', 'result', [['p1', '*', 'p2'], '-', 'p3']],['print', 'result']]
+  #  calc9 = ['calc', ['read', 'n'],['while', [0, '<', 5]['set', 'sum', 2], ['set', 'n',['n', '+', 'sum']],['set', 'n',['n', '-','sum']], ['print', 'n'], ['print', 'sum']]]
+    exec_program(calc6)
+
+
+#test_code()
