@@ -5,8 +5,7 @@ def exec_program(program, var_dict={}):
         p = program_statements(program)
         return exec_statements(p,var_dict)
     else:
-        print("this isnt a calc program")
-        return False
+        raise SyntaxError('program isnt a calc program')
 
 
 def exec_statements(p,var_dict):
@@ -34,6 +33,7 @@ def exec_statement(p,var_dict):
 
     elif is_output(p):
         return exec_output(p,var_dict)
+
     else: 
         return exec_expression(p, var_dict)
 
@@ -52,6 +52,8 @@ def exec_expression(p,var_dict):
     elif is_condition(p):
         return exec_condition(p,var_dict)
 
+    else:
+        raise TypeError
 
 def exec_assignement(p,var_dict):
     new_dict = var_dict.copy()
@@ -62,6 +64,7 @@ def exec_assignement(p,var_dict):
 def exec_repetition(p,var_dict):
     while exec_statement(repetition_condition(p),var_dict):
         var_dict = exec_statements(repetition_statements(p),var_dict)
+        
     return var_dict
 
 
@@ -72,6 +75,9 @@ def exec_selection(p,var_dict):
 
     elif selection_has_false_branch(p):
         return exec_statement(selection_false_branch(p),var_dict)
+
+    else:
+        return var_dict
 
 
 
@@ -84,8 +90,13 @@ def exec_input(p,var_dict):
 
 
 def exec_output(p,var_dict):
-    print(output_expression(p), '=', exec_statement(output_expression(p),var_dict))
+    if is_constant(output_expression(p)):
+        print(output_expression(p))
+    else:
+        print(output_expression(p), '=', exec_statement(output_expression(p),var_dict))
+
     return var_dict
+
 
 def exec_binaryexpr(p,var_dict):
 
@@ -116,18 +127,17 @@ def exec_condition(p,var_dict):
 
 
 def test_code():
-        
-    calc1 = ['calc', ['set', 'n', 0], ['set', 'n', 1], ['set', 'n', 3], ['set', 'n', 2], ['print', 'n'], ['print', 'n']]
-    calc2 = ['calc', ['set', 'n', 0], ['while', [0, '<', 5],['print', 'n']]]
-    calc3 = ['calc', ['print', [3, '/', 5]]]
-    calc4 = ['calc', ['print', 5]]
     
+    calc1 = ['calc', ['set', 'n', 'wow'], ['print', 'n']]
+    calc2 = ['calc', ['read', 'n'], ['read', 'sum'], ['while', ['n', '<', 5], ['set', 'n', ['sum', '+', 'n']], ['print', 'n']], ['print', 'n']]
+    calc3 = ['calc', ['print', [3, '%', 5]]]
+    calc4 = ['calc', ['print', 5]]
     calc5 = ['calc', ['set', 'a', 5], ['print', 'a']]
     calc6 = ['calc', ['read', 'n'], ['print', 'n'], ['if', ['n', '>', 5], ['print', 2], ['print', 4]]]
     calc7 = ['calc', ['set', 'x', 7], ['set', 'y', 12], ['set', 'z', ['x', '+', 'y']], ['print', 'z']]
     calc8 = ['calc', ['read', 'p1'],['set', 'p2', 47],['set', 'p3', 179],['set', 'result', [['p1', '*', 'p2'], '-', 'p3']],['print', 'result']]
-  #  calc9 = ['calc', ['read', 'n'],['while', [0, '<', 5]['set', 'sum', 2], ['set', 'n',['n', '+', 'sum']],['set', 'n',['n', '-','sum']], ['print', 'n'], ['print', 'sum']]]
+    calc9 = ['calc', ['read', 'n'],['set', 'sum', 0],['while', ['n', '>', 0], ['set', 'sum', ['sum', '+', 'n']], ['set', 'n', ['n', '-', 1]]], ['print', 'sum']]
     exec_program(calc6)
 
 
-#test_code()
+test_code()
