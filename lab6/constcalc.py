@@ -15,14 +15,7 @@ def exec_statements(p,var_dict):
         
         var_dict = exec_statement(first_statement(p),var_dict)
         exec_statements(rest_statements(p),var_dict)
-
-    else:
         return var_dict
-
-def kill_program():
-    print("something went wrong")
-    exit()
-
 
 def exec_statement(p,var_dict):
 
@@ -68,6 +61,11 @@ def exec_assignement(p,var_dict):
 def exec_repetition(p,var_dict):
     while exec_statement(repetition_condition(p),var_dict):
         var_dict = exec_statements(repetition_statements(p),var_dict)
+        """print(temp_output)
+        if isinstance(temp_output, dict):
+            print('hi cutie <3')
+            var_dict = temp_output"""
+
 
     return var_dict
 
@@ -92,7 +90,6 @@ def exec_input(p,var_dict):
 
 def exec_output(p,var_dict):
     print(exec_statement(output_expression(p),var_dict))
-    return var_dict
 
 
 def exec_binaryexpr(p,var_dict):
@@ -109,9 +106,6 @@ def exec_binaryexpr(p,var_dict):
     if binaryexpr_operator(p) == '/':
         return exec_statement(binaryexpr_left(p),var_dict) / exec_statement(binaryexpr_right(p),var_dict)
 
-    else:
-        kill_program()
-
 
 def exec_condition(p,var_dict):
 
@@ -124,16 +118,12 @@ def exec_condition(p,var_dict):
     elif condition_operator(p) == '=':
         return (exec_statement(condition_left(p),var_dict) == exec_statement(condition_right(p),var_dict))
 
-    else:
-        kill_program()
-
 
 
 def test_code():
         
     calc1 = ['calc', ['set', 'n', 0], ['set', 'n', 1], ['set', 'n', 3], ['set', 'n', 2], ['print', 'n'], ['print', 'n']]
-    #TODO check where the value of n vanishes
-    calc2 = ['calc', ['set', 'n', 0], ['while', [0, '<', 5], ['print', 'n']]]
+    calc2 = ['calc', ['set', 'n', 0], ['while', [0, '<', 5], ['set', 'n', ['n', '+', 1]], ['print', 'n']]]
     calc3 = ['calc', ['print', [3, '/', 5]]]
     calc4 = ['calc', ['print', 5]]
     calc5 = ['calc', ['set', 'a', 5], ['print', 'a']]
