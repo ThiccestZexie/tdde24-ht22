@@ -94,6 +94,18 @@ def traverse(tree, inner_node, leaf, empty_tree):
 
 """Deluppgift 2"""
 
+def contains_key(main_key, tree):
+
+    def inner_node(key, left_value, right_value):
+        return left_value or right_value or (key == main_key)
+
+    def leaf(key):
+        return main_key == key
+
+    def empty_tree():
+        return False
+
+    return traverse(tree, inner_node, leaf, empty_tree)
 
 
 """Deluppgift 3"""
@@ -111,4 +123,23 @@ def tree_size(tree):
 
     return traverse(tree, inner_node, leaf, empty_tree)
 
-print(tree_size([[1, 2, []], 4, [[], 5, 6]]))
+#print(tree_size([[1, 2, []], 4, [[], 5, 6]]))
+
+
+"""Deluppgift 4"""
+
+def tree_depth(tree):
+
+    def inner_node(key, left_value, right_value):
+        return 1 + max(left_value,right_value)
+
+    def leaf(key):
+        return 1
+
+    def empty_tree():
+        return 0
+
+    return traverse(tree, inner_node, leaf, empty_tree)
+
+
+print(tree_depth([]))
