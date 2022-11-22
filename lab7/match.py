@@ -46,10 +46,7 @@ def match(seq, pattern):
 
 def test_match_1():
     """simple matching test"""
-    pattern = [['författare', '&'], ['titel', ['--', 'python', '--']], ['år', '&']]
-    seq = [['författare', ['steve', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']]
-    return match(seq,pattern)
-
+ 
 
 def search(pattern,db):
     """Returns a list of all sequences in the database that match the pattern"""
@@ -58,9 +55,7 @@ def search(pattern,db):
 
 def test_search_1(pattern,db):
     """Checks if lists from the database has been sorted out, True means it works as intended"""
-    return not search(pattern,db)==db
 
-#search([['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']],db))
 #test_match_1()
 
 
@@ -90,7 +85,6 @@ def traverse(tree, inner_node, leaf, empty_tree):
     elif isinstance(tree,int):
         return leaf(tree)
 
-#print(traverse([[1, 2, []], 4, [[], 5, 6]], inner_node_fn, leaf_fn, empty_tree_fn))
 
 """Deluppgift 2"""
 
@@ -101,7 +95,7 @@ def traverse(tree, inner_node, leaf, empty_tree):
 def tree_size(tree):
 
     def inner_node(key, left_value, right_value):
-        return left_value+right_value+1
+        return left_value + right_value + 1
 
     def leaf(key):
         return 1
@@ -111,4 +105,25 @@ def tree_size(tree):
 
     return traverse(tree, inner_node, leaf, empty_tree)
 
-print(tree_size([[1, 2, []], 4, [[], 5, 6]]))
+
+def test():
+    pattern = [['författare', '&'], ['titel', ['--', 'python', '--']], ['år', '&']]
+    seq = [['författare', ['steve', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']]
+
+    assert((tree_size([]))) == 0 # Returns 3 should return 0
+
+    assert(tree_size([[],1,[]])) == 1
+
+    assert(tree_size([[1, 2, []], 4, [[], 5, 6]])) == 5
+    
+    assert traverse([[1, 2, []], 4, [[], 5, 6]], inner_node_fn, leaf_fn, empty_tree_fn) == 7
+
+    assert traverse([6, 7, 8], inner_node_fn, leaf_fn, empty_tree_fn) == 43 
+
+    assert search(pattern,db)==db
+    
+
+    #return match(seq,pattern)
+    print(search([['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']],db))
+
+test()
