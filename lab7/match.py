@@ -43,17 +43,21 @@ def match(seq, pattern):
         return False
 
 
-def test1():
+def test_match_1():
     """simple matching test"""
-    pattern = [['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']]
+    pattern = [['författare', '&'], ['titel', ['--', 'python', '--']], ['år', '&']]
     seq = [['författare', ['steve', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']]
-    print(match(seq,pattern))
+    return match(seq,pattern)
 
 
 def search(pattern,db):
-    matching_lists = [seq for seq in db if match(seq, pattern)]
-    print(matching_lists)
+    """Returns a list of all sequences in the database that match the pattern"""
+    return [seq for seq in db if match(seq, pattern)]
 
 
-search([['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']],db)
-#test1()
+def test_search_1(pattern,db):
+    """Checks if lists from the database has been sorted out, True means it works as intended"""
+    return not search(pattern,db)==db
+
+#search([['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']],db))
+#test_match_1()
