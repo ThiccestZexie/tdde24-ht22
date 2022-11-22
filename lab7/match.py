@@ -1,4 +1,4 @@
-
+"""Lab 7A"""
 
 db = [[['författare', ['john', 'zelle']],
        ['titel', ['python', 'programming', 'an', 'introduction', 'to',
@@ -61,3 +61,29 @@ def test_search_1(pattern,db):
 
 #search([['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']],db))
 #test_match_1()
+
+
+"""Lab 7B"""
+
+"""Deluppgift 1"""
+
+def empty_tree_fn():
+    return 0
+
+def leaf_fn(key):
+    return key**2
+
+def inner_node_fn(key, left_value, right_value):
+    return key + left_value
+
+
+def traverse(tree, inner_node, leaf, empty_tree):
+    if isinstance(tree,list):
+        if tree == []:
+            return empty_tree
+        return inner_node(tree[1],traverse(tree[0], inner_node, leaf, empty_tree),traverse(tree[2], inner_node, leaf, empty_tree))
+
+    elif isinstance(tree,int):
+        return leaf(tree)
+
+print(traverse([6,7,8], inner_node_fn, leaf_fn, empty_tree_fn))
