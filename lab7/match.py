@@ -18,6 +18,7 @@ db = [[['författare', ['john', 'zelle']],
        ['titel', ['programmering', 'i', 'lisp']],
        ['år', 1993]]]
 
+
 def match(seq, pattern):
     """
     Returns whether given sequence matches the given pattern
@@ -78,12 +79,36 @@ def inner_node_fn(key, left_value, right_value):
 
 
 def traverse(tree, inner_node, leaf, empty_tree):
+
     if isinstance(tree,list):
+
         if tree == []:
-            return empty_tree
+            return empty_tree()
+
         return inner_node(tree[1],traverse(tree[0], inner_node, leaf, empty_tree),traverse(tree[2], inner_node, leaf, empty_tree))
 
     elif isinstance(tree,int):
         return leaf(tree)
 
-print(traverse([6,7,8], inner_node_fn, leaf_fn, empty_tree_fn))
+#print(traverse([[1, 2, []], 4, [[], 5, 6]], inner_node_fn, leaf_fn, empty_tree_fn))
+
+"""Deluppgift 2"""
+
+
+
+"""Deluppgift 3"""
+
+def tree_size(tree):
+
+    def inner_node(key, left_value, right_value):
+        return left_value+right_value+1
+
+    def leaf(key):
+        return 1
+
+    def empty_tree():
+        return 0
+
+    return traverse(tree, inner_node, leaf, empty_tree)
+
+print(tree_size([[1, 2, []], 4, [[], 5, 6]]))
