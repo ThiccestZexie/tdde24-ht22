@@ -132,7 +132,7 @@ def test_code():
     calc2 = ['calc', ['read', 'n'], ['read', 'sum'], ['while', ['n', '<', 5], ['set', 'n', ['sum', '+', 'n']], ['print', 'n']], ['print', 'n']] # test reading decimals or strings
     calc3 = ['calc', ['print', [3, '%', 5]]] # Tries to print a binary expression 
     calc4 = ['print', 'hi'] # Not a calc
-
+        
     # Calc 5-10 are normal tests to show the functionality of the 'calc' language
     calc5 = ['calc', ['print', 5]]
     calc6 = ['calc', ['set', 'a', 5], ['print', 'a']]

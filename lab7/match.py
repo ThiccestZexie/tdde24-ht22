@@ -23,7 +23,6 @@ def match(seq, pattern):
     """
     Returns whether given sequence matches the given pattern
     """
-    print(pattern)
 
     if not pattern:
         return not seq
@@ -47,28 +46,14 @@ def match(seq, pattern):
 
     elif seq[0] == pattern[0]:
         return match(seq[1:], pattern[1:])
-    
+  
     else:
         return False
-
-
-def test_match_1():
-    """simple matching test"""
-    pattern = [['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']]
-    seq = [['författare', ['steve', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']]
-    return match(seq,pattern)
 
 
 def search(pattern,db):
     """Returns a list of all sequences in the database that match the pattern"""
     return [seq for seq in db if match(seq, pattern)]
-
-
-def test_search_1(pattern,db):
-    """Checks if lists from the database has been sorted out, True means it works as intended"""
-    return not search(pattern,db) == db
-
-print(test_match_1())
 
 
 """Lab 7B"""
@@ -97,7 +82,6 @@ def traverse(tree, inner_node, leaf, empty_tree):
     elif isinstance(tree,int):
         return leaf(tree)
 
-#print(traverse([[1, 2, []], 4, [[], 5, 6]], inner_node_fn, leaf_fn, empty_tree_fn))
 
 """Deluppgift 2"""
 
@@ -120,7 +104,7 @@ def contains_key(main_key, tree):
 def tree_size(tree):
 
     def inner_node(key, left_value, right_value):
-        return left_value+right_value+1
+        return left_value + right_value + 1
 
     def leaf(key):
         return 1
@@ -129,9 +113,6 @@ def tree_size(tree):
         return 0
 
     return traverse(tree, inner_node, leaf, empty_tree)
-
-#print(tree_size([[1, 2, []], 4, [[], 5, 6]]))
-
 
 """Deluppgift 4"""
 
@@ -147,3 +128,24 @@ def tree_depth(tree):
         return 0
 
     return traverse(tree, inner_node, leaf, empty_tree)
+
+def test():
+    pattern = [['författare', '&'], ['titel', ['--', 'python', '--']], ['år', '&']]
+
+    assert((tree_size([]))) == 0 # Returns 3 should return 0
+
+    assert(tree_size([[],1,[]])) == 1
+
+    assert(tree_size([[1, 2, []], 4, [[], 5, 6]])) == 5
+    
+    assert traverse([[1, 2, []], 4, [[], 5, 6]], inner_node_fn, leaf_fn, empty_tree_fn) == 7
+
+    assert traverse([6, 7, 8], inner_node_fn, leaf_fn, empty_tree_fn) == 43 
+
+    assert search(pattern,db) == [[['författare', ['john', 'zelle']], ['titel', ['python', 'programming', 'an', 'introduction', 'to', 'computer', 'science']], ['år', 2010]], [['författare', ['john', 'zelle']], ['titel', ['data', 'structures', 'and', 'algorithms', 'using', 'python', 'and', 'c++']], ['år', 2009]]]
+  
+    assert tree_depth(9) == 1
+
+    assert tree_depth([1, 5, [10, 7, 14]]) == 3
+
+test()
