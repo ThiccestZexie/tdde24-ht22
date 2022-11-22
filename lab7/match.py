@@ -1,3 +1,5 @@
+from books import *
+
 def match(seq, pattern):
     """
     Returns whether given sequence matches the given pattern
@@ -11,6 +13,8 @@ def match(seq, pattern):
             return False
         else:
             return match(seq[1:], pattern)
+    elif pattern[0] == list:
+        return match(seq[0],pattern[0])
     elif not seq:
         return False
     elif pattern[0] == '&':
@@ -19,3 +23,9 @@ def match(seq, pattern):
         return match(seq[1:], pattern[1:])
     else:
         return False
+
+
+
+seq = [['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']]
+pattern = [['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']]
+print(match(seq,pattern))
