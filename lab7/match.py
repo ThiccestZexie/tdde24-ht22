@@ -23,10 +23,14 @@ def match(seq, pattern):
     """
     Returns whether given sequence matches the given pattern
     """
+    print(pattern)
+
     if not pattern:
         return not seq
+
     elif isinstance(pattern[0],list):
-        return match(seq[0],pattern[0])
+            return match(seq[0],pattern[0]) and match(seq[1:], pattern[1:])
+
     elif pattern[0] == '--':
         if match(seq, pattern[1:]):
             return True
@@ -34,19 +38,23 @@ def match(seq, pattern):
             return False
         else:
             return match(seq[1:], pattern)
+
     elif not seq:
         return False
+
     elif pattern[0] == '&':
         return match(seq[1:], pattern[1:])
+
     elif seq[0] == pattern[0]:
         return match(seq[1:], pattern[1:])
+    
     else:
         return False
 
 
 def test_match_1():
     """simple matching test"""
-    pattern = [['författare', '&'], ['titel', ['--', 'python', '--']], ['år', '&']]
+    pattern = [['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']]
     seq = [['författare', ['steve', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']]
     return match(seq,pattern)
 
@@ -58,10 +66,9 @@ def search(pattern,db):
 
 def test_search_1(pattern,db):
     """Checks if lists from the database has been sorted out, True means it works as intended"""
-    return not search(pattern,db)==db
+    return not search(pattern,db) == db
 
-#search([['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']],db))
-#test_match_1()
+print(test_match_1())
 
 
 """Lab 7B"""
@@ -140,6 +147,3 @@ def tree_depth(tree):
         return 0
 
     return traverse(tree, inner_node, leaf, empty_tree)
-
-
-print(tree_depth([]))
