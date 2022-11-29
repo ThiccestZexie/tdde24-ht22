@@ -19,41 +19,39 @@ def exec_statements(p,var_dict):
 
 def exec_statement(p,var_dict):
 
-    if is_assignment(p):
-        return exec_assignement(p,var_dict)
 
-    elif is_repetition(p):
-        return exec_repetition(p,var_dict)
+ #   if is_repetition(p): # Changed to condition     
+  #      return exec_repetition(p,var_dict)
 
-    elif is_selection(p):
+    if is_selection(p):
         return exec_selection(p,var_dict)
-
     elif is_input(p):
         return exec_input(p,var_dict)
-
-    elif is_output(p):
-        return exec_output(p,var_dict)
-
     else: 
-        return exec_expression(p, var_dict)
+        return eval_expression(p, var_dict)
 
 
-def exec_expression(p,var_dict):
+def eval_expression(p,var_dict):
     
     if is_variable(p):
         return var_dict[p]
 
     elif is_constant(p):
         return p
-    
+    elif is_output(p): #should this be in eval or statments
+        return exec_output(p,var_dict)
+
     elif is_binaryexpr(p):
         return exec_binaryexpr(p,var_dict)
 
     elif is_condition(p):
-        return exec_condition(p,var_dict)
+        return eval_condition(p,var_dict)
 
+    elif is_assignment:
+        exec_assignement(p,var_dict)
     else:
         raise TypeError
+
 
 def exec_assignement(p,var_dict):
     new_dict = var_dict.copy()
@@ -111,9 +109,11 @@ def exec_binaryexpr(p,var_dict):
 
     if binaryexpr_operator(p) == '/':
         return exec_statement(binaryexpr_left(p),var_dict) / exec_statement(binaryexpr_right(p),var_dict)
+    else:
+        raise SyntaxError
 
 
-def exec_condition(p,var_dict):
+def eval_condition(p,var_dict):
 
     if condition_operator(p) == '>':
         return (exec_statement(condition_left(p),var_dict) > exec_statement(condition_right(p),var_dict))
@@ -123,7 +123,10 @@ def exec_condition(p,var_dict):
 
     elif condition_operator(p) == '=':
         return (exec_statement(condition_left(p),var_dict) == exec_statement(condition_right(p),var_dict))
-
+    elif is_condition(p):
+        repetition_condition(p,var_dict)
+    else:
+        raise SyntaxError
 
 
 def test_code():
