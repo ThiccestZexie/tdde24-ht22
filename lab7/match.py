@@ -23,25 +23,27 @@ def match(seq, pattern):
     """
     Returns whether given sequence matches the given pattern
     """
-    print(pattern[0])
-    print(pattern[1:])
+
     if not pattern:
         return not seq
 
     elif isinstance(pattern[0],list):
-        return match(seq[0],pattern[0])
+            return match(seq[0],pattern[0]) and match(seq[1:], pattern[1:])
+
     elif pattern[0] == '--':
         if match(seq, pattern[1:]):
             return True
         elif not seq:
             return False
         else:
-            print("hi")
             return match(seq[1:], pattern)
+
     elif not seq:
         return False
+
     elif pattern[0] == '&':
         return match(seq[1:], pattern[1:])
+
     elif seq[0] == pattern[0]:
         return match(seq[1:], pattern[1:])
   
@@ -53,9 +55,6 @@ def search(pattern,db):
     """Returns a list of all sequences in the database that match the pattern"""
     return [seq for seq in db if match(seq, pattern)]
 
-
-def test_search_1(pattern,db):
-    """Checks if lists from the database has been sorted out, True means it works as intended"""
 
 """Lab 7B"""
 
