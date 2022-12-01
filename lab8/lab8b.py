@@ -1,9 +1,13 @@
+from cal_abstraction import *
+
 # =========================================================================
 # Type definition
 # =========================================================================
 
 # Define the type somehow...  The initial "" is simply here as a placeholder.
-TimeSpanSeq = ""
+TimeSpanSeq = NamedTuple(
+    "TimeSpanSeq", [("TimeSpans", List[TimeSpan])]
+)
 
 # =========================================================================
 #  Function implementations
@@ -11,8 +15,14 @@ TimeSpanSeq = ""
 
 # Implement these functions!  Also determine if you need *additional* functions.
 
-def new_time_span_seq():
-    pass
+def new_time_span_seq(TimeSpans: List[TimeSpan] = None) -> TimeSpanSeq:
+    """ Create and return a list of Timespans """
+
+    if TimeSpans is None:
+        TimeSpans = []
+    else:
+        ensure_type(TimeSpans, List[TimeSpan])
+    return TimeSpanSeq(TimeSpans)
 
 
 def tss_is_empty(tss):
