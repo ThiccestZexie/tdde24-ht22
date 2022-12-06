@@ -31,9 +31,6 @@ def exec_statement(p,var_dict):
     elif is_output(p):
         return exec_output(p,var_dict)
 
-    elif is_condition(p):
-        return eval_condition(p,var_dict)
-
     elif is_assignment:
         return exec_assignement(p,var_dict)
 
