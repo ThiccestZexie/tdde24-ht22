@@ -1,4 +1,5 @@
 from cal_abstraction import *
+from cal_output import *
 
 # =========================================================================
 # Type definition
@@ -24,7 +25,7 @@ def new_time_span_seq(TimeSpans: List[TimeSpan] = None) -> TimeSpanSeq:
     else:
         ensure_type(TimeSpans, List[TimeSpan])
 
-    return TimeSpanSeq(TimeSpans)
+    return tss_sort_spans(TimeSpanSeq(TimeSpans))
 
 
 def tss_is_empty(tss):
@@ -41,7 +42,7 @@ def tss_plus_span(tss, ts):
 
     tss.TimeSpans.append(ts)
 
-    return tss
+    return tss_sort_spans(tss)
 
 
 def tss_iter_spans(tss):
@@ -55,10 +56,12 @@ def tss_iter_spans(tss):
 def show_time_spans(tss):
     ensure_type(tss, TimeSpanSeq)
 
-    return tss_iter_spans(tss)
+    for TimeSpan in tss.TimeSpans:
+        show_ts(TimeSpan)
 
 
 def tss_sort_spans(tss):
+    """TODO fundamentally wrong, currently duplicates TimeSpan if only one is given"""
     ensure_type(tss, TimeSpanSeq)
 
     new_tss = []
@@ -67,7 +70,7 @@ def tss_sort_spans(tss):
         if new_tss == []:
             new_tss.append(TimeSpan)
         for i in range(len(new_tss)):
-            if TimeSpan <= new_tss[i]:
+            if hour_number(time_hour(ts_start(TimeSpan))) <= hour_number(time_hour(ts_start(new_tss[i]))):
                 new_tss.insert(i, TimeSpan)
                 break
 
@@ -104,10 +107,11 @@ ts_2 = new_time_span(t_start_2, t_end_2)
 
 first_tss = new_time_span_seq([ts_2])
 
+print(first_tss)
 tss_plus_span(first_tss,ts_1)
 
 tss_iter_spans(first_tss)
 
-show_time_spans(first_tss)
+tss_sort_spans(first_tss)
 
-print(tss_sort_spans(first_tss))
+#show_time_spans(first_tss)
