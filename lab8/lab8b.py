@@ -20,25 +20,64 @@ def new_time_span_seq(TimeSpans: List[TimeSpan] = None) -> TimeSpanSeq:
 
     if TimeSpans is None:
         TimeSpans = []
+
     else:
         ensure_type(TimeSpans, List[TimeSpan])
+
     return TimeSpanSeq(TimeSpans)
 
 
 def tss_is_empty(tss):
-    pass
+    if tss == []:
+        return False
+
+    else:
+        return True
 
 
 def tss_plus_span(tss, ts):
-    pass
+    ensure_type(tss, TimeSpanSeq)
+    ensure_type(ts, TimeSpan)
+
+    tss.TimeSpans.append(ts)
+
+    return tss
 
 
 def tss_iter_spans(tss):
-    pass
+
+    ensure_type(tss, TimeSpanSeq)
+
+    for TimeSpan in tss.TimeSpans:
+        yield TimeSpan
 
 
 def show_time_spans(tss):
-    pass
+    ensure_type(tss, TimeSpanSeq)
+
+    return tss_iter_spans(tss)
+
+
+def tss_sort_spans(tss):
+    ensure_type(tss, TimeSpanSeq)
+
+    new_tss = []
+
+    for TimeSpan in tss.TimeSpans:
+        if new_tss == []:
+            new_tss.append(TimeSpan)
+        for i in range(len(new_tss)):
+            if TimeSpan <= new_tss[i]:
+                new_tss.insert(i, TimeSpan)
+                break
+
+            else:
+                new_tss.append(TimeSpan)
+                break
+
+
+    return TimeSpanSeq(new_tss)
+    
 
 
 # Keep only time spans that satisfy pred.
@@ -50,3 +89,25 @@ def tss_keep_spans(tss, pred):
             result = tss_plus_span(result, span)
 
     return result
+
+
+
+
+
+t_start = new_time(new_hour(12),new_minute(0))
+t_end = new_time(new_hour(13),new_minute(0))
+ts_1 = new_time_span(t_start, t_end)
+
+t_start_2 = new_time(new_hour(11),new_minute(0))
+t_end_2 = new_time(new_hour(17),new_minute(0))
+ts_2 = new_time_span(t_start_2, t_end_2)
+
+first_tss = new_time_span_seq([ts_2])
+
+tss_plus_span(first_tss,ts_1)
+
+tss_iter_spans(first_tss)
+
+show_time_spans(first_tss)
+
+print(tss_sort_spans(first_tss))
