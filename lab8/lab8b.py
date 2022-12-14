@@ -25,58 +25,71 @@ def new_time_span_seq(TimeSpans: List[TimeSpan] = None) -> TimeSpanSeq:
     else:
         ensure_type(TimeSpans, List[TimeSpan])
 
-    return tss_sort_spans(TimeSpanSeq(TimeSpans))
+    return TimeSpanSeq(TimeSpans)
 
+def tss_timespans(tss):
+    return tss.TimeSpans
 
 def tss_is_empty(tss):
-    if tss == []:
-        return False
-
-    else:
-        return True
+    """Return true iff the given TimeSpanSeq has no TimeSpans."""
+    ensure_type(tss, TimeSpanSeq)
+    return not tss_timespans(tss)
 
 
-def tss_plus_span(tss, ts):
+def tss_plus_span(tss: TimeSpanSeq, ts: TimeSpan) -> TimeSpanSeq:
+    """
+    Returns a copy of the given TimeSpanSeq, where the given TimeSpan
+    has been added in its proper position.
+    """
     ensure_type(tss, TimeSpanSeq)
     ensure_type(ts, TimeSpan)
 
-    tss.TimeSpans.append(ts)
+    def add_ts(ts: TimeSpan, ts_list: list[TimeSpan]):
+        if not ts_list or time_precedes(
+                ts_start(ts), ts_start(ts_list[0])
+        ):
+            return [ts] + ts_list
+        else:
+            return [ts_list[0]] + add_ts(ts, ts_list[1:])
 
-    return tss_sort_spans(tss)
+    return new_time_span_seq(add_ts(ts, tss_timespans(tss)))
 
 
 def tss_iter_spans(tss):
-
+    """To be used as `for TimeSpan in tss_iter_spans(tss)"""
     ensure_type(tss, TimeSpanSeq)
 
-    for TimeSpan in tss.TimeSpans:
+    for TimeSpan in tss_timespans(tss):
         yield TimeSpan
 
 
 def show_time_spans(tss):
+    """ Prints a list of the TimeSpans in the given TimeSpanSeq """
     ensure_type(tss, TimeSpanSeq)
 
-    for TimeSpan in tss.TimeSpans:
+    for TimeSpan in tss_iter_spans(tss):
         show_ts(TimeSpan)
+        print(' ')
 
 
 def tss_sort_spans(tss):
-    """TODO fundamentally wrong, currently duplicates TimeSpan if only one is given"""
     ensure_type(tss, TimeSpanSeq)
+
+    copy_tss = tss_timespans(tss).copy()
 
     new_tss = []
 
-    for TimeSpan in tss.TimeSpans:
-        if new_tss == []:
-            new_tss.append(TimeSpan)
-        for i in range(len(new_tss)):
-            if hour_number(time_hour(ts_start(TimeSpan))) <= hour_number(time_hour(ts_start(new_tss[i]))):
-                new_tss.insert(i, TimeSpan)
-                break
+    for i in range(len(copy_tss)):
+        ts = copy_tss.pop()
 
-            else:
-                new_tss.append(TimeSpan)
-                break
+        if new_tss == []:
+            new_tss.append(ts)
+
+        elif (hour_number(time_hour(ts_start(ts))) <= hour_number(time_hour(ts_start(new_tss[i-1])))):
+            new_tss.insert(i, ts)
+
+        else:
+            new_tss.append(ts)
 
 
     return TimeSpanSeq(new_tss)
@@ -96,22 +109,27 @@ def tss_keep_spans(tss, pred):
 
 
 
-
+"""
 t_start = new_time(new_hour(12),new_minute(0))
 t_end = new_time(new_hour(13),new_minute(0))
 ts_1 = new_time_span(t_start, t_end)
 
-t_start_2 = new_time(new_hour(11),new_minute(0))
-t_end_2 = new_time(new_hour(17),new_minute(0))
-ts_2 = new_time_span(t_start_2, t_end_2)
+t_start = new_time(new_hour(11),new_minute(0))
+t_end = new_time(new_hour(17),new_minute(0))
+ts_2 = new_time_span(t_start, t_end)
 
-first_tss = new_time_span_seq([ts_2])
+t_start = new_time(new_hour(13),new_minute(0))
+t_end = new_time(new_hour(16),new_minute(0))
+ts_3 = new_time_span(t_start, t_end)
 
-print(first_tss)
-tss_plus_span(first_tss,ts_1)
+first_tss = new_time_span_seq([ts_3,ts_1])
+
+first_tss = tss_plus_span(first_tss,ts_2)
 
 tss_iter_spans(first_tss)
 
-tss_sort_spans(first_tss)
+show_time_spans(first_tss)
 
-#show_time_spans(first_tss)
+empty_tss = new_time_span_seq()
+print(tss_is_empty(empty_tss))
+"""
