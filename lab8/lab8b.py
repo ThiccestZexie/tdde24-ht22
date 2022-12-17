@@ -17,21 +17,27 @@ TimeSpanSeq = NamedTuple(
 # Implement these functions!  Also determine if you need *additional* functions.
 
 def new_time_span_seq(TimeSpans: List[TimeSpan] = None) -> TimeSpanSeq:
-    """ Create and return a list of Timespans """
+    """ Create and return a sorted TimeSpanSeq out of a list of Timespans """
 
     if TimeSpans is None:
-        TimeSpans = []
+        tss = TimeSpanSeq([])
 
     else:
         ensure_type(TimeSpans, List[TimeSpan])
 
-    return TimeSpanSeq(TimeSpans)
+        tss = TimeSpanSeq([TimeSpans[0]])
+        
+        for ts in TimeSpans[1:]:
+            tss = tss_plus_span(tss, ts)
+        
+
+    return tss
 
 def tss_timespans(tss):
     return tss.TimeSpans
 
 def tss_is_empty(tss):
-    """Return true iff the given TimeSpanSeq has no TimeSpans."""
+    """ Return true if the given TimeSpanSeq has no TimeSpans. """
     ensure_type(tss, TimeSpanSeq)
     return not tss_timespans(tss)
 
@@ -45,6 +51,8 @@ def tss_plus_span(tss: TimeSpanSeq, ts: TimeSpan) -> TimeSpanSeq:
     ensure_type(ts, TimeSpan)
 
     def add_ts(ts: TimeSpan, ts_list: list[TimeSpan]):
+        ensure_type(ts, TimeSpan)
+        ensure_type(ts_list, list[TimeSpan])
         if not ts_list or time_precedes(
                 ts_start(ts), ts_start(ts_list[0])
         ):
@@ -52,7 +60,7 @@ def tss_plus_span(tss: TimeSpanSeq, ts: TimeSpan) -> TimeSpanSeq:
         else:
             return [ts_list[0]] + add_ts(ts, ts_list[1:])
 
-    return new_time_span_seq(add_ts(ts, tss_timespans(tss)))
+    return TimeSpanSeq(add_ts(ts, tss_timespans(tss)))
 
 
 def tss_iter_spans(tss):
@@ -70,31 +78,7 @@ def show_time_spans(tss):
     for TimeSpan in tss_iter_spans(tss):
         show_ts(TimeSpan)
         print(' ')
-
-
-def tss_sort_spans(tss):
-    ensure_type(tss, TimeSpanSeq)
-
-    copy_tss = tss_timespans(tss).copy()
-
-    new_tss = []
-
-    for i in range(len(copy_tss)):
-        ts = copy_tss.pop()
-
-        if new_tss == []:
-            new_tss.append(ts)
-
-        elif (hour_number(time_hour(ts_start(ts))) <= hour_number(time_hour(ts_start(new_tss[i-1])))):
-            new_tss.insert(i, ts)
-
-        else:
-            new_tss.append(ts)
-
-
-    return TimeSpanSeq(new_tss)
     
-
 
 # Keep only time spans that satisfy pred.
 # You do not need to modify this function.
@@ -107,29 +91,61 @@ def tss_keep_spans(tss, pred):
     return result
 
 
+def test_8b_sorting():
+    """ Tests if new TimeSpanSeq are sorted correctly """
+    t_start = new_time(new_hour(12),new_minute(0))
+    t_end = new_time(new_hour(13),new_minute(0))
+    ts_1 = new_time_span(t_start, t_end)
+
+    t_start = new_time(new_hour(11),new_minute(0))
+    t_end = new_time(new_hour(17),new_minute(0))
+    ts_2 = new_time_span(t_start, t_end)
+
+    t_start = new_time(new_hour(13),new_minute(0))
+    t_end = new_time(new_hour(16),new_minute(0))
+    ts_3 = new_time_span(t_start, t_end)
+
+    tss_1 = new_time_span_seq([ts_3,ts_1,ts_2])
+
+    tss_2 = new_time_span_seq([ts_1,ts_2,ts_3])
+
+    assert tss_1 == tss_2
+
+def test_8b_empty():
+    """ Tests if tss_is_empty returns the correct values """
+    empty_tss = new_time_span_seq()
+
+    assert tss_is_empty(empty_tss) == True
 
 
-"""
-t_start = new_time(new_hour(12),new_minute(0))
-t_end = new_time(new_hour(13),new_minute(0))
-ts_1 = new_time_span(t_start, t_end)
+    t_start = new_time(new_hour(12),new_minute(0))
+    t_end = new_time(new_hour(13),new_minute(0))
+    ts_1 = new_time_span(t_start, t_end)
 
-t_start = new_time(new_hour(11),new_minute(0))
-t_end = new_time(new_hour(17),new_minute(0))
-ts_2 = new_time_span(t_start, t_end)
+    not_empty_tss = new_time_span_seq([ts_1])
 
-t_start = new_time(new_hour(13),new_minute(0))
-t_end = new_time(new_hour(16),new_minute(0))
-ts_3 = new_time_span(t_start, t_end)
+    assert tss_is_empty(not_empty_tss) == False
 
-first_tss = new_time_span_seq([ts_3,ts_1])
+def test_8b_show():
+    """ Tests the show function, if it prints a list of timespans it works """
+    t_start = new_time(new_hour(12),new_minute(0))
+    t_end = new_time(new_hour(13),new_minute(0))
+    ts_1 = new_time_span(t_start, t_end)
 
-first_tss = tss_plus_span(first_tss,ts_2)
+    t_start = new_time(new_hour(11),new_minute(0))
+    t_end = new_time(new_hour(17),new_minute(0))
+    ts_2 = new_time_span(t_start, t_end)
 
-tss_iter_spans(first_tss)
+    t_start = new_time(new_hour(13),new_minute(0))
+    t_end = new_time(new_hour(16),new_minute(0))
+    ts_3 = new_time_span(t_start, t_end)
 
-show_time_spans(first_tss)
+    tss_1 = new_time_span_seq([ts_3,ts_1,ts_2])
 
-empty_tss = new_time_span_seq()
-print(tss_is_empty(empty_tss))
-"""
+    show_time_spans(tss_1)
+
+
+def test_8b():
+    test_8b_sorting()
+    test_8b_empty()
+    test_8b_show()
