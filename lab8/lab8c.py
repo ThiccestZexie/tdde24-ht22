@@ -7,8 +7,6 @@ def remove(cal_name: str, day: int, month: str, start: str) -> None:
     mon = new_month(month)
     start = new_time_from_string(start)
     cal_year = get_calendar(cal_name)
-    cal_month = cy_get_month(mon, cal_year)
-    cal_day = cm_get_day(cal_month, day)
 
     new_date(day, mon)
 
