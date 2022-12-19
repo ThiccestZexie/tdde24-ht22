@@ -9,22 +9,6 @@ def remove(cal_name: str, day: int, month: str, start: str) -> None:
     day = new_day(day)
     mon = new_month(month)
     start = new_time_from_string(start)
-<<<<<<< HEAD
-    cal_year = get_calendar(cal_name) #gets the year
-    cal_month = cy_get_month(mon, cal_year) # gets the month
-    cal_day = cm_get_day(cal_month, day) # get the date 
-    new_cal_day = []
-    for app in cal_day.appointments:
-        new_cal_day.append(cd_plus_appointment(cal_day, app))
-    new_cal_month = cm_plus_cd(cal_month, new_cal_day)
-    new_cal_year = cy_plus_cm(cal_year, new_cal_month)
-
-    for appointment in new_cal_day.appointments:  # checks if the start time exists in the date
-        if start == ts_start(app_span(appointment)):
-            new_cal_day.appointments.remove(appointment)
-    return new_cal_year
- 
-=======
     cal_year = get_calendar(cal_name)
 
     # new_date checks that the date is valid
@@ -91,7 +75,6 @@ def cd_minus_appointment(cal_day: CalendarDay, appointment: Appointment) -> Cale
         new_appointments.remove(app)
         return new_appointments
 
->>>>>>> 077da47ea01be90787ff92d96010ad35a5ffdcb1
 
     return new_calendar_day(
         cd_day(cal_day), remove_appointment(appointment, cal_day.appointments)
