@@ -3,25 +3,26 @@ from cal_abstraction import *
 from cal_ui import *
 
 def remove(cal_name: str, day: int, month: str, start: str) -> None:
+    """ Remove an appointment in the calendar with the given name. Should be in cal_ui.py"""
+    
+
     day = new_day(day)
     mon = new_month(month)
     start = new_time_from_string(start)
     cal_year = get_calendar(cal_name)
 
+    # new_date checks that the date is valid
     new_date(day, mon)
 
-    if 'the time doesnt exist' and False:
-        1
-    else:
-        # Get a new CalendarYear with the new appointment...
-        new_year = minus_appointment(cal_year, day, mon, start)
-        # ...and let the calendar name refer to this CalendarYear instead.
-        if new_year == None:
-            print('There is no appointment to remove at that time')
+    # Get a new CalendarYear with the appointment removed...
+    new_year = minus_appointment(cal_year, day, mon, start)
+    # ...and let the calendar name refer to this CalendarYear instead.
+    if new_year == None:
+        print('There is no appointment to remove at that time')
 
-        else:
-            insert_calendar(cal_name, new_year)
-            print("The appointment has been removed.")
+    else:
+        insert_calendar(cal_name, new_year)
+        print("The appointment has been removed.")
     
 
 def minus_appointment(
@@ -37,6 +38,8 @@ def minus_appointment(
     This is a helper function using our internal data types.  See also the remove()
     function in lab8c.py, which provides an external user interface to be called
     by users.
+
+    Should be in cal_booking.py
     """
 
     # removes an appointment by taking apart a calendar year, removing the
@@ -61,6 +64,8 @@ def cd_minus_appointment(cal_day: CalendarDay, appointment: Appointment) -> Cale
     """
     Returns a copy of the given CalendarDay, where the given Appointment
     has been removed.
+
+    Should be in cal_abstraction.py
     """
     ensure_type(appointment, Appointment)
     ensure_type(cal_day, CalendarDay)
@@ -76,7 +81,8 @@ def cd_minus_appointment(cal_day: CalendarDay, appointment: Appointment) -> Cale
     )
 
             
-def test_labc():
+def test_labc_exists():
+    """ Tests removing an appointment """
     create("Jayne")
     book("Jayne", 20, "sep", "12:00", "14:00", "Rob train")
     book("Jayne", 20, "sep", "15:00", "16:00", "Escape with loot")
@@ -84,4 +90,11 @@ def test_labc():
     remove("Jayne", 20, "sep", "15:00")
     show("Jayne", 20, "sep")
 
-test_labc()
+def test_labc_not_exists():
+    """ Tests removing an appointment that doesnt exist """
+    create("Jayne")
+    book("Jayne", 20, "sep", "12:00", "14:00", "Rob train")
+    book("Jayne", 20, "sep", "15:00", "16:00", "Escape with loot")
+    show("Jayne", 20, "sep")
+    remove("Jayne", 20, "sep", "16:00")
+    show("Jayne", 20, "sep")

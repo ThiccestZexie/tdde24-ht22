@@ -29,14 +29,15 @@ def new_time_span_seq(TimeSpans: List[TimeSpan] = None) -> TimeSpanSeq:
         
         for ts in TimeSpans[1:]:
             tss = tss_plus_span(tss, ts)
-        
 
     return tss
 
-def tss_timespans(tss):
+
+def tss_timespans(tss: TimeSpanSeq) -> list[TimeSpan]:
     return tss.TimeSpans
 
-def tss_is_empty(tss):
+
+def tss_is_empty(tss: TimeSpanSeq) -> bool:
     """ Return true if the given TimeSpanSeq has no TimeSpans. """
     ensure_type(tss, TimeSpanSeq)
     return not tss_timespans(tss)
@@ -63,7 +64,7 @@ def tss_plus_span(tss: TimeSpanSeq, ts: TimeSpan) -> TimeSpanSeq:
     return TimeSpanSeq(add_ts(ts, tss_timespans(tss)))
 
 
-def tss_iter_spans(tss):
+def tss_iter_spans(tss: TimeSpanSeq) -> TimeSpan:
     """To be used as `for TimeSpan in tss_iter_spans(tss)"""
     ensure_type(tss, TimeSpanSeq)
 
@@ -71,7 +72,7 @@ def tss_iter_spans(tss):
         yield TimeSpan
 
 
-def show_time_spans(tss):
+def show_time_spans(tss: TimeSpanSeq) -> None:
     """ Prints a list of the TimeSpans in the given TimeSpanSeq """
     ensure_type(tss, TimeSpanSeq)
 
@@ -111,6 +112,7 @@ def test_8b_sorting():
 
     assert tss_1 == tss_2
 
+
 def test_8b_empty():
     """ Tests if tss_is_empty returns the correct values """
     empty_tss = new_time_span_seq()
@@ -125,6 +127,7 @@ def test_8b_empty():
     not_empty_tss = new_time_span_seq([ts_1])
 
     assert tss_is_empty(not_empty_tss) == False
+
 
 def test_8b_show():
     """ Tests the show function, if it prints a list of timespans it works """
@@ -149,3 +152,7 @@ def test_8b():
     test_8b_sorting()
     test_8b_empty()
     test_8b_show()
+    print('all tests passed :)')
+
+if __name__ == "__main__":
+    test_8b()

@@ -30,8 +30,6 @@ def ts_overlapping_part(ts1: TimeSpan, ts2: TimeSpan) -> TimeSpan:
     ensure_type(ts2, TimeSpan)
     ensure((ts1, ts2), lambda tup: ts_overlap(tup[0], tup[1]))
 
-    # Tips: Det finns både snyggare och *enklare* sätt
-    # att göra detta...
     min1 = max(
         hour_number(time_hour(ts_start(ts1))) * 60 + minute_number(time_minute(ts_start(ts1))),  #
         hour_number(time_hour(ts_start(ts2))) * 60 + minute_number(time_minute(ts_start(ts2))),
