@@ -53,7 +53,7 @@ def minus_appointment(
     old_cal_day = cm_get_day(old_cal_month, day)
 
     for appointment in cd_iter_appointments(old_cal_day):
-        if start == ts_start(app_span(appointment)):
+        if time_equals(start, ts_start(app_span(appointment))):
             new_cal_day = cd_minus_appointment(old_cal_day, appointment)
             new_cal_month = cm_plus_cd(old_cal_month, new_cal_day)
             new_cal_year = cy_plus_cm(cal_year, new_cal_month)
@@ -99,3 +99,5 @@ def test_labc_not_exists():
     show("Jayne", 20, "sep")
     remove("Jayne", 20, "sep", "16:00")
     show("Jayne", 20, "sep")
+
+test_labc_not_exists()
