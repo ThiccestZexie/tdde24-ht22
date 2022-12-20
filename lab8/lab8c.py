@@ -99,5 +99,3 @@ def test_labc_not_exists():
     show("Jayne", 20, "sep")
     remove("Jayne", 20, "sep", "16:00")
     show("Jayne", 20, "sep")
-
-test_labc_not_exists()

@@ -39,7 +39,7 @@ def free_spans(cal_day: CalendarDay, start: Time, end: Time) -> TimeSpanSeq:
         print('start and end time is the same, there is no time to print')
         return new_time_span_seq()
 
-    elif not cal_day.appointments:
+    elif cd_is_empty(cal_day):
         return new_time_span_seq([new_time_span(start,end)])
 
     else: # check for the first appointment of the day see start and go from "start" to that start and repeat at the end
